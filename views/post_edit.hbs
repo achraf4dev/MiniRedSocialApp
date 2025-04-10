@@ -1,0 +1,54 @@
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-semibold text-gray-900 mb-6">Editar Publicación</h1>
+  
+  <form action="/posts/{{post._id}}/edit" method="POST" class="bg-white shadow-md rounded-lg overflow-hidden">
+    <div class="p-6 space-y-6">
+      <!-- Post Content -->
+      <div>
+        <label for="content" class="block text-sm font-medium text-gray-700">Contenido</label>
+        <div class="mt-1">
+          <textarea id="content" name="content" rows="4" maxlength="255" 
+                    class="block w-full rounded-lg border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">{{post.content}}</textarea>
+          <div class="mt-1 flex justify-end">
+            <span class="text-xs text-gray-500">
+              <span id="charCount">{{post.content.length}}</span>/255 caracteres
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Error Message -->
+      {{#if error}}
+      <div class="rounded-lg bg-danger/10 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-danger" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-danger">{{error}}</p>
+          </div>
+        </div>
+      </div>
+      {{/if}}
+    </div>
+    
+    <!-- Form Actions -->
+    <div class="bg-gray-50 px-6 py-4 flex items-center justify-between">
+      <a href="/posts/{{post._id}}" class="text-sm font-medium text-gray-700 hover:text-gray-900">Cancelar</a>
+      <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-primary hover:bg-secondary focus:outline-none">
+        Guardar cambios
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const content = document.getElementById('content');
+  const charCount = document.getElementById('charCount');
+  
+  content.addEventListener('input', function() {
+    charCount.textContent = this.value.length;
+  });
+</script> 

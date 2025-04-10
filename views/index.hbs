@@ -1,0 +1,133 @@
+<div class="px-4 sm:px-0">
+  <h1 class="text-2xl font-semibold text-gray-900 mb-8">Publicaciones</h1>
+
+  {{#if currentUser}}
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8 border border-gray-100">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Crear nueva publicación</h2>
+      <form action="/posts" method="POST">
+        {{#if error}}
+          <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg relative mb-4" role="alert">
+            <span class="block sm:inline">{{error}}</span>
+          </div>
+        {{/if}}
+        <div class="mb-2">
+          <textarea 
+            name="content" 
+            id="postContent"
+            placeholder="¿Qué estás pensando?" 
+            rows="3" 
+            maxlength="255"
+            required
+            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-3 border resize-none"
+            onkeyup="updateCharCount('postContent', 'charCount', 255)"
+          ></textarea>
+        </div>
+        <div class="flex justify-between items-center mb-2">
+          <div class="text-xs text-gray-500" id="charCount">0/255 caracteres</div>
+          <button 
+            type="submit"
+            class="inline-flex items-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-secondary focus:outline-none transition-all"
+          >
+            <svg class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+            </svg>
+            Publicar
+          </button>
+        </div>
+      </form>
+    </div>
+  {{else}}
+    <div class="bg-accent rounded-lg p-6 mb-8 border border-blue-100">
+      <p class="text-gray-700">
+        <a href="/login" class="text-primary font-medium hover:underline">Inicia sesión</a> para publicar contenido.
+      </p>
+    </div>
+  {{/if}}
+
+  {{#if posts.length}}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 posts-container">
+      {{#each posts}}
+        <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-all border border-gray-100 flex flex-col h-full" id="post-{{this._id}}">
+          <div class="p-4 flex-grow">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <a href="/profile/{{this.author.username}}">
+                    <div class="h-10 w-10 rounded-full overflow-hidden border border-gray-200">
+                      <img src="{{this.author.displayPhoto}}" alt="{{this.author.username}}" class="h-full w-full object-cover">
+                    </div>
+                  </a>
+                </div>
+                <div class="ml-3">
+                  <a href="/profile/{{this.author.username}}" class="text-sm font-medium text-gray-900 hover:underline">{{this.author.username}}</a>
+                  <p class="text-xs text-gray-500">{{this.createdAt}}</p>
+                </div>
+              </div>
+              
+              {{#if this.isAuthor}}
+                <div class="flex space-x-3">
+                  <a href="/posts/{{this._id}}/edit" class="text-gray-400 hover:text-primary transition-all p-1">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </a>
+                  <form action="/posts/{{this._id}}/delete" method="POST" class="inline" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta publicación?');">
+                    <button type="submit" class="text-gray-400 hover:text-danger transition-all p-1">
+                      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </form>
+                </div>
+              {{/if}}
+            </div>
+            <p class="text-gray-700 mb-4 text-sm leading-relaxed post-content line-clamp-4">{{this.content}}</p>
+          </div>
+          <div class="px-4 py-3 bg-gray-50 border-t border-gray-100">
+            <a href="/posts/{{this._id}}" class="text-sm font-medium text-primary hover:text-secondary transition-all inline-flex items-center">
+              Ver detalles y comentarios 
+              <svg class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="posts-container">
+      <div class="bg-yellow-50 border border-yellow-200 p-6 rounded-lg text-center">
+        <svg class="h-12 w-12 mx-auto text-yellow-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="text-yellow-700 font-medium">No hay publicaciones aún.</p>
+      </div>
+    </div>
+  {{/if}}
+</div>
+
+<script>
+  function updateCharCount(textareaId, counterId, maxLength) {
+    const textarea = document.getElementById(textareaId);
+    const counter = document.getElementById(counterId);
+    const currentLength = textarea.value.length;
+    
+    counter.textContent = `${currentLength}/${maxLength} caracteres`;
+    
+    if (currentLength >= maxLength) {
+      counter.classList.add('text-danger');
+      counter.classList.remove('text-gray-500');
+    } else {
+      counter.classList.add('text-gray-500');
+      counter.classList.remove('text-danger');
+    }
+  }
+  
+  // Initialize character count on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const postContent = document.getElementById('postContent');
+    if (postContent) {
+      updateCharCount('postContent', 'charCount', 255);
+    }
+  });
+</script>

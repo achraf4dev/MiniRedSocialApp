@@ -1,0 +1,173 @@
+<div class="px-4 sm:px-0">
+  <div class="flex items-center space-x-2 mb-6">
+    <a href="/" class="text-primary hover:text-secondary transition-all inline-flex items-center">
+      <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Volver
+    </a>
+    <h1 class="text-2xl font-semibold text-gray-900">Detalles de la publicación</h1>
+  </div>
+
+  <div class="bg-white shadow-md rounded-lg p-6 mb-8 border border-gray-100" id="post-{{post._id}}">
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <a href="/profile/{{post.author.username}}">
+            <div class="h-12 w-12 rounded-full overflow-hidden border border-gray-200">
+              <img src="{{post.author.displayPhoto}}" alt="{{post.author.username}}" class="h-full w-full object-cover">
+            </div>
+          </a>
+        </div>
+        <div class="ml-3">
+          <a href="/profile/{{post.author.username}}" class="text-lg font-medium text-gray-900 hover:underline">{{post.author.username}}</a>
+          <p class="text-sm text-gray-500">{{post.createdAt}}</p>
+        </div>
+      </div>
+      
+      {{#if isPostAuthor}}
+        <div class="flex space-x-3">
+          <a href="/posts/{{post._id}}/edit" class="text-gray-400 hover:text-primary transition-all p-1">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          </a>
+          <form action="/posts/{{post._id}}/delete" method="POST" class="inline" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta publicación?');">
+            <button type="submit" class="text-gray-400 hover:text-danger transition-all p-1">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </form>
+        </div>
+      {{/if}}
+    </div>
+    <div class="border-t border-gray-100 pt-4">
+      <p class="text-gray-700 text-base post-content">{{post.content}}</p>
+    </div>
+  </div>
+
+  <!-- Comments section -->
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Comentarios</h2>
+    
+    {{#if currentUser}}
+      <div class="bg-white shadow-md rounded-lg p-6 mb-6 border border-gray-100">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Deja un comentario</h3>
+        <form action="/posts/{{post._id}}/comments" method="POST">
+          {{#if error}}
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg relative mb-4" role="alert">
+              <span class="block sm:inline">{{error}}</span>
+            </div>
+          {{/if}}
+          <div class="mb-2">
+            <textarea 
+              name="content" 
+              id="commentContent"
+              placeholder="Escribe tu comentario..." 
+              rows="2" 
+              maxlength="255"
+              required
+              class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-3 border resize-none"
+              onkeyup="updateCommentCharCount()"
+            ></textarea>
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="text-xs text-gray-500" id="commentCharCount">0/255 caracteres</div>
+            <button 
+              type="submit"
+              class="inline-flex items-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-secondary focus:outline-none transition-all"
+            >
+              <svg class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+              </svg>
+              Comentar
+            </button>
+          </div>
+        </form>
+      </div>
+    {{else}}
+      <div class="bg-accent rounded-lg p-6 mb-6 border border-blue-100">
+        <p class="text-gray-700">
+          <a href="/login" class="text-primary font-medium hover:underline">Inicia sesión</a> para dejar un comentario.
+        </p>
+      </div>
+    {{/if}}
+    
+    <div class="space-y-4" id="comments-{{post._id}}">
+      {{#if comments.length}}
+        {{#each comments}}
+          <div class="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-all border border-gray-100" id="comment-{{this._id}}">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <a href="/profile/{{this.author.username}}">
+                    <div class="h-8 w-8 rounded-full overflow-hidden border border-gray-200">
+                      <img src="{{this.author.displayPhoto}}" alt="{{this.author.username}}" class="h-full w-full object-cover">
+                    </div>
+                  </a>
+                </div>
+                <div class="ml-3">
+                  <a href="/profile/{{this.author.username}}" class="text-sm font-medium text-gray-900 hover:underline">{{this.author.username}}</a>
+                  <p class="text-xs text-gray-500">{{this.createdAt}}</p>
+                </div>
+              </div>
+              
+              <div class="flex space-x-2">
+                {{#if this.canEdit}}
+                  <a href="/posts/{{../post._id}}/comments/{{this._id}}/edit" class="text-gray-400 hover:text-primary transition-all p-1">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </a>
+                {{/if}}
+                
+                {{#if this.canDelete}}
+                  <form action="/posts/{{../post._id}}/comments/{{this._id}}/delete" method="POST" class="inline" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este comentario?');">
+                    <button type="submit" class="text-gray-400 hover:text-danger transition-all p-1">
+                      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </form>
+                {{/if}}
+              </div>
+            </div>
+            <p class="text-gray-700 text-sm">{{this.content}}</p>
+          </div>
+        {{/each}}
+      {{else}}
+        <div class="bg-gray-50 border border-gray-200 p-6 rounded-lg text-center">
+          <p class="text-gray-700">No hay comentarios aún.</p>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+<script>
+  function updateCommentCharCount() {
+    const textarea = document.getElementById('commentContent');
+    const counter = document.getElementById('commentCharCount');
+    
+    if (textarea && counter) {
+      const currentLength = textarea.value.length;
+      const maxLength = 255;
+      
+      counter.textContent = `${currentLength}/${maxLength} caracteres`;
+      
+      if (currentLength >= maxLength) {
+        counter.classList.add('text-danger');
+        counter.classList.remove('text-gray-500');
+      } else {
+        counter.classList.add('text-gray-500');
+        counter.classList.remove('text-danger');
+      }
+    }
+  }
+  
+  // Initialize character count on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    updateCommentCharCount();
+  });
+</script>

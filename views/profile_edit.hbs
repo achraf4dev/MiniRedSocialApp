@@ -1,0 +1,86 @@
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-semibold text-gray-900 mb-6">Editar Perfil</h1>
+  
+  <form action="/profile/edit" method="POST" class="bg-white shadow-md rounded-lg overflow-hidden">
+    <div class="p-6 space-y-6">
+      <!-- Profile Photo -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Foto de perfil</label>
+        <div class="mt-2 flex items-center space-x-4">
+          <div class="h-16 w-16 rounded-full overflow-hidden bg-gray-100">
+            <img src="{{user.displayPhoto}}" alt="{{user.username}}" class="h-full w-full object-cover">
+          </div>
+          <div>
+            <label for="profilePhoto" class="block text-sm font-medium text-gray-700 mb-1">URL de la imagen</label>
+            <input type="text" id="profilePhoto" name="profilePhoto" value="{{user.profilePhoto}}" 
+                  class="block w-full rounded-lg border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
+            <p class="mt-1 text-xs text-gray-500">Ingresa la URL completa de tu imagen de perfil</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Full Name -->
+      <div>
+        <label for="fullName" class="block text-sm font-medium text-gray-700">Nombre completo</label>
+        <div class="mt-1">
+          <input type="text" id="fullName" name="fullName" value="{{user.fullName}}" 
+                class="block w-full rounded-lg border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
+        </div>
+      </div>
+      
+      <!-- Bio -->
+      <div>
+        <label for="bio" class="block text-sm font-medium text-gray-700">Biografía</label>
+        <div class="mt-1">
+          <textarea id="bio" name="bio" rows="3" 
+                    class="block w-full rounded-lg border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">{{user.bio}}</textarea>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-200 my-6"></div>
+      
+      <!-- Change Password Section -->
+      <div>
+        <h3 class="text-lg font-medium text-gray-900">Cambiar contraseña</h3>
+        <p class="text-sm text-gray-500 mb-4">Deja estos campos en blanco si no deseas cambiar tu contraseña</p>
+        
+        <div class="space-y-4">
+          <!-- Current Password -->
+          <div>
+            <label for="currentPassword" class="block text-sm font-medium text-gray-700">Contraseña actual</label>
+            <div class="mt-1">
+              <input type="password" id="currentPassword" name="currentPassword" 
+                    class="block w-full rounded-lg border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
+            </div>
+          </div>
+          
+          <!-- New Password -->
+          <div>
+            <label for="newPassword" class="block text-sm font-medium text-gray-700">Nueva contraseña</label>
+            <div class="mt-1">
+              <input type="password" id="newPassword" name="newPassword" 
+                    class="block w-full rounded-lg border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
+            </div>
+          </div>
+          
+          <!-- Confirm New Password -->
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirmar nueva contraseña</label>
+            <div class="mt-1">
+              <input type="password" id="confirmPassword" name="confirmPassword" 
+                    class="block w-full rounded-lg border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Form Actions -->
+    <div class="bg-gray-50 px-6 py-4 flex items-center justify-between">
+      <a href="/profile" class="text-sm font-medium text-gray-700 hover:text-gray-900">Cancelar</a>
+      <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-primary hover:bg-secondary focus:outline-none">
+        Guardar cambios
+      </button>
+    </div>
+  </form>
+</div> 

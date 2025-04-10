@@ -1,0 +1,44 @@
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-semibold text-gray-900 mb-8">Notificaciones</h1>
+  
+  {{#if notifications.length}}
+    <div class="space-y-4">
+      {{#each notifications}}
+        <div class="bg-white shadow-md rounded-lg p-5 hover:shadow-lg transition-all border border-gray-100 {{#unless this.read}}border-l-4 border-l-primary{{/unless}}">
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <a href="/profile/{{this.sender.username}}">
+                <div class="h-10 w-10 rounded-full overflow-hidden border border-gray-200">
+                  <img src="{{this.sender.displayPhoto}}" alt="{{this.sender.username}}" class="h-full w-full object-cover">
+                </div>
+              </a>
+            </div>
+            <div class="ml-4 flex-1">
+              {{#if (eq this.type "comment")}}
+                <p class="text-gray-700">
+                  <a href="/profile/{{this.sender.username}}" class="font-medium hover:underline">{{this.sender.username}}</a>
+                  ha comentado en tu 
+                  <a href="/notifications/{{this._id}}/read" class="text-primary hover:underline font-medium transition-all">publicación</a>.
+                </p>
+              {{/if}}
+              <p class="text-xs text-gray-500 mt-2">{{this.createdAt}}</p>
+            </div>
+            {{#unless this.read}}
+              <div class="flex items-center justify-center h-5 w-5 bg-primary text-white text-xs rounded-full" title="Nuevo">
+                <span class="sr-only">Nuevo</span>
+              </div>
+            {{/unless}}
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="bg-white text-gray-600 rounded-lg p-8 text-center border border-gray-100 shadow-md">
+      <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+      </svg>
+      <p class="text-gray-700 font-medium">No tienes notificaciones.</p>
+      <p class="text-gray-500 text-sm mt-2">Las notificaciones aparecerán aquí cuando alguien interactúe con tus publicaciones.</p>
+    </div>
+  {{/if}}
+</div> 

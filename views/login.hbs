@@ -1,0 +1,48 @@
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Iniciar Sesión</h2>
+    <p class="mt-2 text-center text-sm text-gray-600">Ingresa tus credenciales para acceder a tu cuenta</p>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
+    <div class="bg-white py-8 px-6 shadow-md rounded-lg border border-gray-100 sm:px-10">
+      <form class="space-y-6" action="/login" method="POST">
+        {{#if error}}
+          <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm" role="alert">
+            <span class="block sm:inline">{{error}}</span>
+          </div>
+        {{/if}}
+        
+        <div>
+          <label for="email" class="block text-sm font-medium leading-6 text-gray-700">Correo electrónico</label>
+          <div class="mt-2">
+            <input id="email" name="email" type="email" autocomplete="email" required 
+                   class="block w-full rounded-lg border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 transition-all">
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between">
+            <label for="password" class="block text-sm font-medium leading-6 text-gray-700">Contraseña</label>
+          </div>
+          <div class="mt-2">
+            <input id="password" name="password" type="password" autocomplete="current-password" required 
+                   class="block w-full rounded-lg border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 transition-all">
+          </div>
+        </div>
+
+        <div>
+          <button type="submit" 
+                  class="flex w-full justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all">
+            Entrar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <p class="mt-6 text-center text-sm text-gray-500">
+      ¿No tienes una cuenta? 
+      <a href="/register" class="font-semibold leading-6 text-primary hover:text-secondary transition-all">Regístrate</a>
+    </p>
+  </div>
+</div>
